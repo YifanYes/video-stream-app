@@ -15,6 +15,7 @@ import { UserService } from './service/user.service'
 import { UserController } from './controller/user.controller'
 import { Video, VideoSchema } from './model/video.schema'
 import { User, UserSchema } from './model/user.schema'
+import { isAuthenticated } from './app.middleware'
 
 @Module({
     imports: [
@@ -43,3 +44,11 @@ import { User, UserSchema } from './model/user.schema'
     controllers: [AppController, VideoController, UserController],
     providers: [AppService, VideoService, UserService]
 })
+export class AppModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer
+            .apply(isAuthenticated)
+            .exclude({ path: 'api/v1/video/:id', method: RequestMethod.GET })
+            .forRoutes(VideoController)
+    }
+}
