@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common'
 import { Video } from '../model/video.schema'
 import { VideoService } from '../service/video.service'
-import { FileFieldsInterceptor, FilesInterceptor } from '@nestjs/platform-express'
+import { FileFieldsInterceptor } from '@nestjs/platform-express'
 
 @Controller('/api/v1/video')
 export class VideoController {
