@@ -1,20 +1,27 @@
-import { Module } from '@nestjs/common'
+import { Module, RequestMethod, MiddlewareConsumer } from '@nestjs/common'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { MongooseModule } from '@nestjs/mongoose'
-import { ServeStaticModule } from '@nestjs/serve-static'
-import { JwtModule } from '@nestjs/jwt'
-import { secret } from './utils/constants'
-import { join } from 'path/posix'
 import { MulterModule } from '@nestjs/platform-express'
 import { diskStorage } from 'multer'
 import { v4 as uuidv4 } from 'uuid'
+import { ServeStaticModule } from '@nestjs/serve-static'
+import { JwtModule } from '@nestjs/jwt'
+import { secret } from './utils/constants'
+import { join } from 'path'
+import { VideoController } from './controller/video.controller'
+import { VideoService } from './service/video.service'
+import { UserService } from './service/user.service'
+import { UserController } from './controller/user.controller'
+import { Video, VideoSchema } from './model/video.schema'
+import { User, UserSchema } from './model/user.schema'
 
 @Module({
     imports: [
-        MongooseModule.forRoot(
-            'mongodb+srv://yifan:root@cluster0.8pojb.mongodb.net/?retryWrites=true&w=majority'
-        ),
+        MongooseModule.forRoot('mongodb://localhost:27017/Stream'),
+        MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+        MongooseModule.forFeature([{ name: Video.name, schema: VideoSchema }]),
+
         MulterModule.register({
             storage: diskStorage({
                 destination: './public',
@@ -32,7 +39,7 @@ import { v4 as uuidv4 } from 'uuid'
             rootPath: join(__dirname, '..', 'public')
         })
     ],
-    controllers: [AppController],
-    providers: [AppService]
+
+    controllers: [AppController, VideoController, UserController],
+    providers: [AppService, VideoService, UserService]
 })
-export class AppModule {}
