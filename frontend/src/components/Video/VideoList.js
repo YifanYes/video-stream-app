@@ -9,7 +9,7 @@ import Grid from '@mui/material/Grid';
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
-export const VideoList = ({ setLoggedIn }) => {
+export default function VideoList({ setLoggedIn }) {
     const [videos, setVideos] = React.useState([])
     const navigate = useNavigate();
 
